@@ -37,9 +37,17 @@ export default function Worksheet() {
     setWorksheetData([...worksheetData, data]);
   };
 
+  const filterData = worksheetData.filter((entry) => {
+    const entryDate = new Date(entry.date);
+    return (
+      entryDate.getFullYear() === selectedYear &&
+      entryDate.getMonth() === selectedMonth
+    );
+  });
+
   return (
     <>
-      <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
+      <section className="bg-gray-500 dark:bg-gray-900 p-3 sm:p-5">
         <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
           <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
             <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -115,7 +123,7 @@ export default function Worksheet() {
                   </tr>
                 </thead>
                 <tbody>
-                  {worksheetData.map((entry, index) => (
+                  {filterData.map((entry, index) => (
                     <tr key={index} className="border-b">
                       <td className="px-4 py-3 border">{index + 1}</td>
                       <td className="px-4 py-3 border">{entry.date}</td>

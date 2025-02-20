@@ -2,7 +2,7 @@ export default function dashboard() {
   return (
     <div>
       <header className="antialiased">
-        <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-900">
+        <nav className="bg-gray-500 border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-900">
           <div className="flex flex-wrap justify-between items-center">
             <div className="flex justify-start items-center">
               <a href="https://flowbite.com" className="flex mr-4">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface WorksheetModalProps {
   isOpen: boolean;
@@ -22,12 +22,41 @@ export default function WorksheetModal({
   const [projectName, setProjectName] = useState("");
   const [pm, setPm] = useState("");
   const [workDescription, setWorkDescription] = useState("");
+  const [error, setError] = useState("");
+
+  const projectOptions = [
+    "Project1",
+    "Project2",
+    "Project3",
+    "Project4",
+    "Project5",
+  ];
+
+  useEffect(() => {
+    if (!isOpen) {
+      setDate("");
+      setProjectName("");
+      setPm("");
+      setWorkDescription("");
+      setError("");
+    }
+  }, [isOpen]);
+
+  const handleSubmit = () => {
+    if (!date || !projectName || !pm || !workDescription) {
+      setError("All fields are required!"); // Show error message
+      return;
+    }
+    setError(""); // Clear error if validation passes
+    onSave({ date, projectName, pm, workDescription });
+    onClose();
+  };
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+      <form className="bg-white p-6 rounded-lg shadow-lg w-96">
         <h2 className="text-xl font-bold mb-4">Add Worksheet Entry</h2>
 
         {/* Date Input */}
@@ -37,16 +66,26 @@ export default function WorksheetModal({
           className="w-full border p-2 rounded mb-4"
           value={date}
           onChange={(e) => setDate(e.target.value)}
+          required
         />
 
         {/* Project Name Input */}
         <label className="block mb-2">Project Name</label>
-        <input
-          type="text"
+        <select
           className="w-full border p-2 rounded mb-4"
           value={projectName}
           onChange={(e) => setProjectName(e.target.value)}
-        />
+          required
+        >
+          <option value="" disabled>
+            Select a Project
+          </option>
+          {projectOptions.map((project, index) => (
+            <option key={index} value={project}>
+              {project}
+            </option>
+          ))}
+        </select>
 
         {/* PM Input */}
         <label className="block mb-2">PM</label>
@@ -55,6 +94,7 @@ export default function WorksheetModal({
           className="w-full border p-2 rounded mb-4"
           value={pm}
           onChange={(e) => setPm(e.target.value)}
+          required
         />
 
         {/* Work Description */}
@@ -63,6 +103,7 @@ export default function WorksheetModal({
           className="w-full border p-2 rounded mb-4"
           value={workDescription}
           onChange={(e) => setWorkDescription(e.target.value)}
+          required
         />
 
         {/* Buttons */}
@@ -74,16 +115,17 @@ export default function WorksheetModal({
             Cancel
           </button>
           <button
-            onClick={() => {
-              onSave({ date, projectName, pm, workDescription });
-              onClose();
-            }}
+            // onClick={() => {
+            //   onSave({ date, projectName, pm, workDescription });
+            //   onClose();
+            // }}
+            onClick={handleSubmit}
             className="px-4 py-2 bg-blue-500 text-white rounded"
           >
             Submit
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
